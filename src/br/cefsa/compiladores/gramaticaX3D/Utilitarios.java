@@ -113,22 +113,79 @@ public class Utilitarios
 	
 	public static double[] atualizaPosicoes(double[] posicoes, double angulo)
 	{
-		
+		int passo = 20;
 		double radiano = angulo * (Math.PI/180);
-		double[] posicaoImagemXYZ = new double[3];
+		double[] novaPosicaoXY = new double[3];
 		
-		BigDecimal bdX = new BigDecimal(Math.cos(radiano) * 1).setScale(2, RoundingMode.HALF_EVEN);
-		BigDecimal bdY = new BigDecimal(Math.sin(radiano) * 1).setScale(2, RoundingMode.HALF_EVEN);
+		//BigDecimal bdX = new BigDecimal().setScale(2, RoundingMode.HALF_EVEN);
+		//BigDecimal bdY = new BigDecimal().setScale(2, RoundingMode.HALF_EVEN);
 		
-		posicoes[0] += bdX.doubleValue(); //ca = cos * hip
-		posicoes[1] += bdY.doubleValue(); //co = sen * hip
+		novaPosicaoXY[0] += Math.round(posicoes[0] - (Math.sin(radiano) * passo)); //co = sen * hip
+		novaPosicaoXY[1] += Math.round(posicoes[1] - (Math.cos(radiano) * passo)); //ca = cos * hip
 		
-		posicaoImagemXYZ = posicoes;
+		System.out.println("X: " + novaPosicaoXY[0] + "\n"
+				+ "Y: " + novaPosicaoXY[1] + "\n");
 
-		return posicaoImagemXYZ;
+		return novaPosicaoXY;
 	}
 	
-	public static String tartaruga(String regraProcessada, Gramatica gramatica)
+	public static String tartarugaSVG(String regraProcessada, Gramatica gramatica)
+	{
+		String corpoTagProcessado = "";
+		double[] posicaoXY = new double[2];
+		posicaoXY[0] = 800; //Referente a X
+		posicaoXY[1] = 800; //Referente a Y
+		double[] proximaPosicaoXY = new double[2];
+		proximaPosicaoXY[0] = 800; //Referente a X
+		proximaPosicaoXY[1] = 800; //Referente a Y
+		double[] posicaoGravadaXY = new double[2];
+		posicaoGravadaXY[0] = 800; //Referente a X
+		posicaoGravadaXY[1] = 800; //Referente a Y
+		
+		double anguloAtual = 0; //Para cima = 0 -- Sentido horario positivo
+		
+
+		for(int i = 0; i < regraProcessada.length(); i++)
+		{
+			if(regraProcessada.charAt(i) == 'F')
+			{
+				proximaPosicaoXY = atualizaPosicoes(posicaoXY, anguloAtual);
+				
+				corpoTagProcessado += 
+						"  					<line x1=\"" + posicaoXY[0] + "\" "
+								+ 				"y1=\"" + posicaoXY[1] + "\" "
+								+ 				"x2=\"" + proximaPosicaoXY[0] + "\" "
+								+ 				"y2=\"" + proximaPosicaoXY[1] + "\" "
+								+ 				"style=\"stroke:rgb(0,255,0);stroke-width:2\" />\r\n";
+				
+				posicaoXY = proximaPosicaoXY;
+
+			}
+			else if(regraProcessada.charAt(i) == '+')
+			{
+				anguloAtual += gramatica.getAngulo();
+			}
+			else if(regraProcessada.charAt(i) == '-')
+			{
+				anguloAtual -= gramatica.getAngulo();
+			}
+			else if(regraProcessada.charAt(i) == '[')
+			{
+				posicaoGravadaXY = posicaoXY;
+			}
+			else if(regraProcessada.charAt(i) == ']')
+			{
+				posicaoXY = posicaoGravadaXY;
+			}
+
+			
+		}
+		
+		System.out.println("Caminhos executados");
+		return corpoTagProcessado;
+	}
+	
+	public static String tartarugaX3D(String regraProcessada, Gramatica gramatica)
 	{
 		String corpoTagProcessado = "";
 		double[] posicaoImagemXYZ = new double[3];
@@ -193,8 +250,26 @@ public class Utilitarios
 		return corpoTagProcessado;
 	}
 	
+	public static String geraHtmlSVG (Gramatica gramatica, String corpoTagProcessadoSVG)
+	{
+		String corpoHtml = "<html> \r\n"
+				+ "        <head> \r\n"
+				+ "            <title>Grafico gerado</title> 			\r\n"
+				+ "        </head> \r\n"
+				+ "        <body> \r\n"
+				+ "            <h1>A gramatica inserida gerou a geometria abaixo</h1> \r\n"
+				+ "			<h3>Gramatica: " + gramatica.getAxioma() + " </h3> \r\n"
+				+ "				<svg height=\"3000\" width=\"3000\">\r\n"
+				+ corpoTagProcessadoSVG + "\r\n"
+				+ "				</svg>\r\n"
+				+ "	</body> \r\n"
+				+ "</html>  ";
+		
+		return corpoHtml;
+	}
+	
 
-	public static String geraHtml (Gramatica gramatica, String corpoTagProcessado)
+	public static String geraHtmlX3D (Gramatica gramatica, String corpoTagProcessado)
 	{
 		String corpoHtml = "<html> \r\n"
 				+ "        <head> \r\n"
