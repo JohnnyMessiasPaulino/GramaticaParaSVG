@@ -10,6 +10,7 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Stack;
 
 /*
  *	Σ    Alfabeto da linguagem
@@ -120,7 +121,7 @@ public class Utilitarios
 		//BigDecimal bdX = new BigDecimal().setScale(2, RoundingMode.HALF_EVEN);
 		//BigDecimal bdY = new BigDecimal().setScale(2, RoundingMode.HALF_EVEN);
 		
-		novaPosicaoXY[0] += Math.round(posicoes[0] - (Math.sin(radiano) * passo)); //co = sen * hip
+		novaPosicaoXY[0] += Math.round(posicoes[0] + (Math.sin(radiano) * passo)); //co = sen * hip
 		novaPosicaoXY[1] += Math.round(posicoes[1] - (Math.cos(radiano) * passo)); //ca = cos * hip
 		
 		System.out.println("X: " + novaPosicaoXY[0] + "\n"
@@ -134,15 +135,15 @@ public class Utilitarios
 		String corpoTagProcessado = "";
 		double[] posicaoXY = new double[2];
 		posicaoXY[0] = 800; //Referente a X
-		posicaoXY[1] = 800; //Referente a Y
+		posicaoXY[1] = 1500; //Referente a Y
 		double[] proximaPosicaoXY = new double[2];
 		proximaPosicaoXY[0] = 800; //Referente a X
-		proximaPosicaoXY[1] = 800; //Referente a Y
-		double[] posicaoGravadaXY = new double[2];
-		posicaoGravadaXY[0] = 800; //Referente a X
-		posicaoGravadaXY[1] = 800; //Referente a Y
+		proximaPosicaoXY[1] = 1500; //Referente a Y
+		Stack<double[]> posicaoGravadaXY = new Stack<double[]>();
+		posicaoGravadaXY.add(proximaPosicaoXY);
 		
 		double anguloAtual = 0; //Para cima = 0 -- Sentido horario positivo
+		double anguloGravado = 0;
 		
 
 		for(int i = 0; i < regraProcessada.length(); i++)
@@ -156,7 +157,7 @@ public class Utilitarios
 								+ 				"y1=\"" + posicaoXY[1] + "\" "
 								+ 				"x2=\"" + proximaPosicaoXY[0] + "\" "
 								+ 				"y2=\"" + proximaPosicaoXY[1] + "\" "
-								+ 				"style=\"stroke:rgb(0,255,0);stroke-width:2\" />\r\n";
+								+ 				"style=\"stroke:rgb(0,0,0);stroke-width:1\" />\r\n";
 				
 				posicaoXY = proximaPosicaoXY;
 
@@ -171,11 +172,14 @@ public class Utilitarios
 			}
 			else if(regraProcessada.charAt(i) == '[')
 			{
-				posicaoGravadaXY = posicaoXY;
+				posicaoGravadaXY.add(posicaoXY);
+				//anguloGravado = anguloAtual;
+				//anguloAtual = 0;
 			}
 			else if(regraProcessada.charAt(i) == ']')
 			{
-				posicaoXY = posicaoGravadaXY;
+				posicaoXY = posicaoGravadaXY.pop();
+				//anguloAtual = anguloGravado;
 			}
 
 			
