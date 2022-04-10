@@ -17,12 +17,15 @@ public class Principal_GramaticaX3D {
 		
 		gramatica = Utilitarios.obtemGramatica(gramaticaTxt);
 		
+		String regraProcessada = Utilitarios.executaRegrasProducao(gramatica);
 		
-		String graficoGerado = Utilitarios.geraGrafico(gramatica);
+		String corpoTagProcessadoCaminhoTartaruga = Utilitarios.tartaruga(regraProcessada, gramatica);
 		
-		Utilitarios.gravarArquivoTxt(enderecoTxtGravacao, graficoGerado);
+		String arquivoHtml = Utilitarios.geraHtml(gramatica, corpoTagProcessadoCaminhoTartaruga);
 		
-		System.out.println(graficoGerado);
+		Utilitarios.gravarArquivoTxt(enderecoTxtGravacao, arquivoHtml);
+		
+		//System.out.println();
 
 	}
 
