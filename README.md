@@ -27,3 +27,5 @@ F
 22.5
 
 F>FF-[-F+F+F]+[+F-F-F]
+
+## Apos o processamento, será gerado um arquivo HTML no diretório arquivoTXT com o resultado da gramatica inserida no formato SVG
