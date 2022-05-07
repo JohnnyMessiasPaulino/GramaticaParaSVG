@@ -10,8 +10,8 @@ public class Principal_GramaticaSVG {
 	{
 		//String enderecoTxtLeitura = "D:\\Teste\\gramatica.txt";
 		String enderecoTxtLeitura = "arquivoTXT\\gramatica.txt";
-		String enderecoTxtGravacaoSVG = "D:\\Teste\\grafico_gerado_SVG.html";
-		//String enderecoTxtGravacaoSVG = "arquivoTXT\\grafico_gerado_SVG.html";
+		//String enderecoTxtGravacaoSVG = "D:\\Teste\\grafico_gerado_SVG.html";
+		String enderecoTxtGravacaoSVG = "arquivoTXT\\grafico_gerado_SVG.html";
 		//String enderecoTxtGravacaoX3D = "D:\\Teste\\grafico_gerado_X3D.html";
 		
 		String gramaticaTxt = Utilitarios.lerArquivoTxt(enderecoTxtLeitura);
